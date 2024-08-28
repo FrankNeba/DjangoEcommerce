@@ -17,7 +17,7 @@
     <p class="text-2xl">{{product.description}}</p>
     <p class="text-sm text-slate-400">{{product.created|timesince}} ago</p>
     
-    <div class="flex flex-row text-sm md:text-2xl md:w-1/2 space-x-10 mt-5">
+    <div class="flex flex-row text-sm md:text-2xl md:w-2/3 space-x-10 mt-5">
         {% if request.user == product.seller %}
         <a href="{% url 'delete' product.id %}" class="text-red-500 shadow-md px-5 py-2">Delete</a>
         <a href="{% url 'editproduct' product.id %}" class="text-blue-500 shadow-md px-5 py-2">Edit</a>

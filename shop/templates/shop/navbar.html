@@ -3,7 +3,7 @@
 
 
 
-<div class="w-full fixed flex flex-row p-4 bg-red-600 top-0 left-0 text-white items-center  shadow-md">
+<div class="w-full fixed flex flex-row p-4 bg-red-600 top-0 left-0 text-white items-center  shadow-md gap-1">
     <a href="{% url 'profile' request.user.id %}" class="w-2/6 md:w-1/6">
         <div class="logo text-6xl font-bold w-full flex flex-row items-center gap-5">
             {% if request.user.is_authenticated %}
@@ -21,16 +21,14 @@
                     <button type="submit" class="md:px-5 md:py-2 px-2 py-1 shadow-md rounded-lg bg-white text-red-500">Search</button>
                 </form>
            
-            
-       <!-- <button class="lg:hidden text-sm" id="menu">Menu</button> -->
        <ion-icon id="menu" name="menu-outline" class="w-10 h-10 lg:hidden place-self-end"></ion-icon>
        <ion-icon id="menu-x" name="close-outline" class="w-10 h-10 hidden lg:hidden place-self-end"></ion-icon>
 
-    <div id="content" class="hidden lg:w-3/6 w-full absolute 
+    <div id="content" class="hidden lg:w-4/6 w-full absolute 
                                 lg:relative flex flex-col bg-red-600 -bottom-80 
                                 lg:bottom-0 lg:flex lg:flex-row justify-center 
-                                lg:justify-around items-center  px-10 right-0 
-                                transition-all duration-2000 ease-in-out pb-32 pt-5 lg:py-0">
+                                lg:justify-between items-center  px-10 right-0 
+                                transition-all duration-2000 ease-in-out pb-32 pt-5 lg:py-0 ">
         <ul class="flex lg:flex-row justify-center lg:justify-around items-center 
                     lg:items-end w-full font-bold text-2xl flex-col space-y-2">
             <li><a href="{% url 'home' %}" >Home</a></li>

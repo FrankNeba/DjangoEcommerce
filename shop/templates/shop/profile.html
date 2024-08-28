@@ -24,7 +24,7 @@
         <div class="flex flex-row grid-row-2 flex-wrap justify-center md:justify-between">
             {% for product in products %}
             
-            <a href="{% url 'product-details' product.id %}"class="shadow-md bg-red-100 mt-4 md:w-[48%]" >
+            <a href="{% url 'product-details' product.id %}"class="shadow-md bg-slate-100 mt-4 md:w-[48%]" >
                 <div class=" p-5 h-68 w-64">
                     
                     <p> {{product.name|capfirst}}</p>
