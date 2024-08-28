@@ -55,7 +55,7 @@ def Signup(request):
                     user.save()
                     login(request, user)
                     return redirect('home')
-                messages.error(request, "Password can easily be guessed. Use a mixture of letters and signs for a strong password")
+                messages.error(request, "Password can easily be guessed. Use a mixture of letters and symbols for a strong password")
             # email = request.POST.get('email')
             # username = request.POST.get('username')
             # password1 = request.POST.get('password1')
