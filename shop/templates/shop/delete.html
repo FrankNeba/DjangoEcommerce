@@ -1,0 +1,18 @@
+{% extends 'shop/main.html' %}
+
+
+{%block content %}
+<main class="mt-32 md:mt-20">
+    <form action="" method="post">
+        {% csrf_token %}
+        <p class="text-xl mb-10">Are you sure you want to delete?</p>
+        <div class="flex flex-row space-x-5">
+            <button type="submit" class="bg-red-500 text-white px-5 py-2 shadow-md">Yes</button>
+            <a href="{{request.META.HTTP_REFERER}}"  class="bg-white text-red-500 px-5 py-2 shadow-md">Cancel</a>
+        </div>
+        
+    </form>
+
+</main>
+
+{% endblock %}

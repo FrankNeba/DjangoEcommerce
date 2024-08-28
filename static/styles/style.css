@@ -1,0 +1,8 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+input{
+    border-style: none;
+    outline: none;
+}

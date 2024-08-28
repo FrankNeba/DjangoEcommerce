@@ -1,0 +1,45 @@
+{% extends 'shop/main.html' %}
+
+
+{% block content %}
+<main class="mt-20 flex items-center justify-center">
+    <form action="" 
+    method = 'post' 
+    class="flex rounded-md flex-col space-y-5 bg-red-600 items-center justify-center p-5 w-1/2 text-white">
+        {% csrf_token %}
+        <div class="w-5/6 flex flex-col">
+            <label 
+                for="productname"
+                class="text-3xl font-medium">Email</label>
+            <input type="email" class="bg-red-100 rounded-sm h-10 text-red-500" name="username" required>
+        </div>
+
+        <div class="w-5/6 flex flex-col">
+            <label 
+                for="image"
+                class="text-3xl font-medium">Password</label>
+            <input type="password" 
+                accept="image/*" 
+                class="bg-red-100 rounded-sm h-10 text-red-500" 
+                name="password"
+                id="image"
+                required>
+        </div>
+
+
+
+        <button type="submit" class="w-16 h-10 bg-red-100 text-red-500 text-2xl font-medium rounded-lg shadow-2xl">Login</button> 
+        
+    
+    
+    </form>
+    {% if messages %}
+        {% for message in messages %}
+        <p class="text-2xl text-red-500">{{message}}</p>
+        {% endfor %}
+        {%endif %}
+</main>
+
+
+
+{% endblock content %}

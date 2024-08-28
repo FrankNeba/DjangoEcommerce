@@ -1,0 +1,45 @@
+{% extends 'shop/main.html' %}
+
+
+{% block content %}
+<main class="mt-32 md:mt-20">
+    <div class="flex flex-col justify-center">
+        <div class="profile-info flex flex-col justify-center items-center mb-5">
+            <img src="{{request.user.avatar.url}}" alt="" class="w-40 h-40 rounded-full">
+            <h2 class="text-4xl font-medium">{{user.name|capfirst}}</h2>
+            <h3 class="text-2xl text-slate-600">@{{user.username}}</h3>
+            <p class="text-slate-600 text-xl">{{use.email}}</p>
+            <p class="text-slate-600 flex items-center text-xl"> 
+                <ion-icon name="location-outline" class="h-6 w-6"></ion-icon>
+                {{user.address}}
+            </p>
+
+            {% if request.user == user %}
+            <a href="{% url 'updateProfile' %}" class="text-blue-500 text-xl">Edit Profile</a>
+            {% endif %}
+
+        </div>
+        <hr>
+
+        <div class="flex flex-col">
+            {% for product in products %}
+            
+            <a href="{% url 'product-details' product.id %}"class="shadow-md bg-red-100 mt-4" >
+                <div class=" p-5 h-60 w-60">
+                    
+                    <p> {{product.name|capfirst}}</p>
+                    <img src="{{product.image.url}}" alt="Product image"  class=" w-full md:w-[300px] h-[80%]"/>
+                    <p>Price: {{product.price|capfirst}} XAF</p>
+                                
+                </div>
+            </a>
+            <br>
+         
+    {% endfor %}
+        </div>
+    </div>
+    
+
+</main>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'shop/main.html' %}
+
+
+{% block content %}
+<main class="mt-20 flex items-center justify-center">
+    <form action="" 
+    method = 'post' 
+    class="flex rounded-md flex-col space-y-5 bg-red-600 items-center justify-center p-5 w-1/2 text-white">
+        {% csrf_token %}
+        <div class="w-5/6 flex flex-col">
+            <label 
+                for="productname"
+                class="text-3xl font-medium">Name</label>
+            <input type="text" class="bg-red-200 rounded-sm h-10" name="name" required>
+        </div>
+
+
+
+
+        <button type="submit" class="w-16 h-10 bg-red-100 text-red-600 text-2xl font-medium rounded-lg shadow-2xl">Add</button> 
+        
+    
+    
+    </form>
+</main>
+
+
+
+{% endblock content %}

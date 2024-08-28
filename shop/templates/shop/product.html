@@ -1,0 +1,29 @@
+{% extends "shop/main.html" %}
+
+
+{% block content %}
+<main class="mt-32 md:mt-20 border-2 border-sm p-2 md:p-10">
+    <div class="mb-10 shadow-md p-3">
+        <img src="{{product.seller.avatar.url}}" alt="{{product.seller.name}}" class="w-20 h-20 rounded-full">
+        <h4>{{product.seller.name}}</h4>
+    </div>
+    <a href="{% url 'image' product.id%}">
+        <img src="{{product.image.url}}" alt="{{product.name}}" class="w-full">
+    </a> <hr>
+    <h1 class="text-3xl font-medium">{{product.name}}</h1>
+    <p class="text-2xl">Price: {{product.price}} XAF</p>
+    <p class="text-2xl">{{product.description}}</p>
+    <div class="flex flex-row text-sm md:text-2xl md:w-1/2 space-x-10 mt-5">
+        <a href="{% url 'delete' product.id %}" class="text-red-500 shadow-md px-5 py-2">Delete</a>
+        <a href="{% url 'editproduct' product.id %}" class="text-blue-500 shadow-md px-5 py-2">Edit</a>
+        <a href="{% url 'addtocart' product.id %}" class="text-green-500 shadow-md px-5 py-2">Add to cart</a>
+    </div>
+</main>
+{% if messages %}
+        {% for message in messages %}
+        <p class="text-2xl text-red-500 mt-1">{{message}}</p>
+        {% endfor %}
+        {%endif %}
+
+
+{% endblock %}

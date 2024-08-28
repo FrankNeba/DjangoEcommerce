@@ -1,0 +1,67 @@
+{% extends 'shop/main.html' %}
+{% block content %}
+
+<main class="mt-32 md:mt-20">
+    {% if request.user.is_authenticated %}
+    <h3 class="text-2xl font-medium">Hello {{request.user.username|capfirst}}</h3>
+    {% endif %}
+    
+        <div class="w-full flex flex-col space-y-3">
+            <a href="{% url 'addcategory' %}" class="text-blue-500">Add category</a>
+            
+             <form action="" class="w-full">
+                <p>Filter category</p>
+                <select name="p" id="" class="w-1/2 shadow-md"> 
+                    <option value="">All</option>
+               
+                    {% for category in categoryoptions %}
+                    <option value="{{category.name}}">
+                        {{category.name}}
+                    </option>
+                     {% endfor %}
+                
+            </select>
+             <button type="submit" class="shadow-md p-1"> Filter</button>
+             </form>
+            
+             
+        </div>
+        <div class="flex flex-col">
+            {% for category in categories %}
+            {% if category.product_set.count > 0 %}
+
+        <div class="h-80 shadow-sm p-4">
+        <h1 class="text-3xl">{{category.name}}</h1> <hr>
+        <div class="flex flex-row gap-5 overflow-scroll ">
+            {% for product in products %}
+            
+         
+         
+            {% if product.category == category %}
+            <a href="{% url 'product-details' product.id %}"class="shadow-md bg-red-100 mt-4" >
+                <div class=" p-5 h-60 w-60">
+                    
+                    <p> {{product.name|capfirst}}</p>
+                    <img src="{{product.image.url}}" alt="Product image"  class=" w-full md:w-[300px] h-[80%]"/>
+                    <p>Price: {{product.price|capfirst}} XAF</p>
+                                
+                </div>
+            </a>
+            <br>
+
+            {% endif %}
+         
+    {% endfor %}
+    </div>
+    </div>
+    <br>
+    {% endif %}
+    {% endfor %}
+    </div>
+   
+</main>
+    
+
+
+
+   {% endblock content %}

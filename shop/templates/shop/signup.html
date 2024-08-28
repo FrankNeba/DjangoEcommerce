@@ -1,0 +1,57 @@
+{% extends 'shop/main.html' %}
+
+
+{% block content %}
+<main class="mt-20 flex items-center justify-center flex-col">
+    <form action="" 
+    method = 'post' 
+    class="flex rounded-md flex-col space-y-5 bg-red-600 items-center justify-center p-5 w-1/2 text-white">
+        {% csrf_token %}
+        <div class="w-5/6 flex flex-col">
+            <label 
+                for="productname"
+                class="text-3xl font-medium">Email</label>
+            <div class="text-red-500">{{form.email}}</div>
+        </div>
+
+        <div class="w-5/6 flex flex-col">
+            <label 
+                for="productname"
+                class="text-3xl font-medium">Username</label>
+            <div class="text-red-500">{{form.username}}</div>
+        </div>
+
+        <div class="w-5/6 flex flex-col">
+            <label 
+                for="image"
+                class="text-3xl font-medium">Password</label>
+                <div class="text-red-500">{{form.password1}}</div>
+            
+        </div>
+
+        <div class="w-5/6 flex flex-col">
+            <label 
+                for="image"
+                class="text-3xl font-medium">Enter Password</label>
+                <div class="text-red-500">{{form.password2}}</div>
+        </div>
+
+       
+
+
+
+        <button type="submit" class="w-16 h-10 bg-red-100 text-red-600 text-2xl font-medium rounded-lg shadow-2xl">Login</button> 
+        
+    
+    
+    </form>
+    {% if messages %}
+        {% for message in messages %}
+        <p class="text-2xl text-red-500">{{message}}</p>
+        {% endfor %}
+        {%endif %}
+</main>
+
+
+
+{% endblock content %}

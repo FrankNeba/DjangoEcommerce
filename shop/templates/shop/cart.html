@@ -1,0 +1,26 @@
+{% extends 'shop/main.html' %}
+
+
+{% block content %}
+<main class="mt-32 md:mt-20">
+    <div>
+        <h3 class="text-2xl font-medium">{{cart.count}} items in cart</h3>
+    </div> 
+    <div>
+        {% for item in cart %}
+        <a href="{% url 'product-details' item.product.id %}"class="shadow-md bg-red-100 mt-4 flex justify-center items-center md:w-1/3" >
+            <div class=" p-5 h-60 w-60 "> 
+                <p class="font-medium"> {{item.product.name|capfirst}}</p>
+                <img src="{{item.product.image.url}}" alt="Product image"  class=" w-full md:w-[300px] h-[80%]"/>
+                <p>Price: {{item.product.price}} XAF</p>                
+            </div>
+        </a>
+        <br>
+
+        {% endfor %}
+    </div>
+    
+
+</main>
+
+{% endblock %}
