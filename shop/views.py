@@ -20,11 +20,8 @@ def home(request):
         p=''
         q=''
     products = Product.objects.filter(Q(category__name__contains = q) | Q(name__contains = p))
-    categories = Category.objects.filter(Q(name__contains = q) | Q(name__contains=p))
-    if products.count() > 0 and categories.count() == 0:
-        categories = []
-        [categories.append(product.category) for product in products if product.category not in categories]
-
+    categories = []
+    [categories.append(product.category) for product in products if product.category not in categories]
     categoryoptions = Category.objects.all()
     context = {'products': products, 'categories':categories, 'categoryoptions': categoryoptions}
     return render(request, 'shop/home.html', context)
