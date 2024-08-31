@@ -16,6 +16,9 @@ urlpatterns = [
     path('add_to_cart/<str:pk>', views.addToCart, name='addtocart'),
     path('cart', views.viewCart, name="cart"),
     path('profile/<str:pk>/', views.profile, name="profile"),
+    path('removeitem/<str:pk>', views.removecart, name='removecart'),
+    path("sendmail", views.mail, name='sendmail'),
+    path('order/<str:pk>', views.order, name='order')
 
     
 ]

@@ -6,22 +6,26 @@ from django.db.models import Q
 from .forms import  UserForm, UserUpdate
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
+from django.core.mail import send_mail
 
 # Create your views here.
 #home view
 def home(request):
-    q = request.GET.get('q')
-    p = request.GET.get('p')
-    if p is not None:
-        q=p
-    elif q is not None:
-        p=q
-    else:
-        p=''
-        q=''
-    products = Product.objects.filter(Q(category__name__contains = q) | Q(name__contains = p))
-    categories = []
-    [categories.append(product.category) for product in products if product.category not in categories]
+    q = request.GET.get('q','')
+    p = request.GET.get('p','')
+    products = list(Product.objects.filter(Q(name__contains = q) ))
+    categories = list(Category.objects.filter(Q(name__contains = p)))
+    # if products.count() > 0 and categories.count() == 0:
+        # categories = []
+        # [categories.append(product.category) for product in products if product.category not in categories]
+    for category in categories:
+        countn = 0
+        for product in products:
+            if product.category == category:
+                countn += 1
+        if countn == 0:
+            categories.remove(category)
+
     categoryoptions = Category.objects.all()
     context = {'products': products, 'categories':categories, 'categoryoptions': categoryoptions}
     return render(request, 'shop/home.html', context)
@@ -121,7 +125,13 @@ def addProduct(request):
         price = int(request.POST.get('price'))
         description = request.POST.get('description')
         category = request.POST.get('category')
-        category = Category.objects.get(id=int(category))
+        otherCategory = request.POST.get('other')
+        if category == 'other':
+            newCategory = Category(name=otherCategory)
+            newCategory.save()
+            category = Category.objects.get(name = newCategory)
+        else:
+            category = Category.objects.get(id=int(category))
         image = request.FILES.get('image')
         form = Product(name = name, seller = seller, price = price, description = description, category = category, image = image)
         form.save()
@@ -162,6 +172,7 @@ def productDetails(request, pk):
     return render(request, 'shop/product.html', context)
 
 #add category
+@login_required(login_url='login')
 def Categories(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -205,6 +216,50 @@ def viewCart(request):
     cart = Cart.objects.filter(user = request.user)
     context = {'cart':cart}
     return render(request, 'shop/cart.html', context)
+
+
+@login_required(login_url='login')
+def removecart(request, pk):
+    item = Cart.objects.get(id=pk)
+    item.delete()
+    return redirect('cart')
+
+@login_required(login_url='login')
+def order(request, pk):
+    product = Product.objects.get(id=pk)
+    if request.method == 'POST':
+        amount = int(request.POST.get('amount'))
+        price = amount * int(product.price)
+        orderMessage = f"Hello {product.seller.username}, \nAn order has been made by {request.user.email}\nName: {request.user.username}\nProduct: {product.name}  \nQuantity: {amount}\nAddress: {request.user.address}\nPrice: {price}XAF"
+        replyMessage = f"Hello {request.user.username}, \nYou have successfully made an order to  {product.seller.email}\nName: {product.seller.username}\nProduct: {product.name}  \nQuantity: {amount}\nPrice: {price}XAF"
+        send_mail(
+        subject="Order Made",
+        message= orderMessage,
+        recipient_list=[product.seller.email],
+        from_email= None,
+        fail_silently=False
+        )
+        send_mail(
+        subject="Order Made",
+        message= replyMessage,
+        recipient_list=[request.user.email],
+        from_email= None,
+        fail_silently=False
+        )
+        return redirect("cart")
+    context = {'product': product}
+    return render(request, 'shop/order.html', context)
+
+@login_required(login_url='login')
+def mail(request):
+    send_mail(
+        subject="Hello",
+        message= "Django Email testing",
+        recipient_list=["frankneba92@gmail.com"],
+        from_email= None,
+        fail_silently=False
+    )
+    return redirect("cart")
     
     
 

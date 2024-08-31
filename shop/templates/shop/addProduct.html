@@ -61,8 +61,21 @@
                     {% for category in categories %}
                     <option value="{{category.id}}" class="bg-red-100 text-black">{{category.name}}</option>
                 {% endfor %}
+                    <option value="other" class="bg-red-100 text-black">Other</option>
                 </select>
                     
+        </div>
+
+        <div class="w-5/6 flex flex-col">
+            <p>Fill the field below if category not found in category list</p>
+            <label 
+                for="price"
+                class="text-3xl font-medium">Item catergory</label>
+            <input type="text" 
+                class="bg-red-100 rounded-sm h-10 text-red-500" 
+                name="other"
+                value="{{product.price}}"
+                >
         </div>
 
 

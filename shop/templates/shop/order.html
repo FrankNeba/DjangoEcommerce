@@ -1,0 +1,37 @@
+{% extends "shop/main.html" %}
+
+{% block content %}
+<main class="mt-20 flex items-center justify-center">
+    <form action="" 
+    method = 'post' 
+    class="flex rounded-md flex-col space-y-5 bg-red-600 items-center justify-center p-5 w-full  md:w-1/2 text-white">
+        {% csrf_token %}
+        <div class="w-5/6 flex flex-col">
+            <div class="flex flex-row text-2xl font-medium">
+                <p>Unit price: </p>
+                <p id="price">{{product.price}}</p>
+                <p> XAF</p>
+            </div>
+
+
+            <label 
+                for="amount"
+                class="text-2xl font-medium">Enter Number of items </label>
+            <input type="number" class="bg-red-100 rounded-sm h-10 text-red-500" name="amount" id="amount" required>
+        </div>
+
+        <div class="flex flex-row">
+            <p>Total: </p>
+            <!-- <p id="total">23</p> -->
+        </div>
+
+
+
+        <button type="submit" class="w-20 h-10 bg-red-100 text-red-500 text-2xl font-medium rounded-lg shadow-2xl">Order</button> 
+        
+    
+    
+    </form>
+</main>
+
+{% endblock content %}
