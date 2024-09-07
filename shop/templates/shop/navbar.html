@@ -3,11 +3,11 @@
 
 
 
-<div class="w-full fixed flex flex-row p-4 bg-red-600 top-0 left-0 text-white items-center  shadow-md gap-1">
-    <a href="{% url 'profile' request.user.id %}" class="w-2/6 md:w-1/6">
+<div class="w-full fixed flex flex-row px-4 bg-red-600 top-0 left-0 text-white items-center  shadow-md gap-1">
+    <a href="{% url 'profile' request.user.id %}" class="w-2/6 md:w-1/6 m-4">
         <div class="logo text-6xl font-bold w-full flex flex-row items-center gap-5">
             {% if request.user.is_authenticated %}
-            <img src="{{request.user.avatar.url}}" alt="ProfilePicture" class="md:w-20 md:h-20 w-14 h-14 rounded-full">
+            <img src="{{request.user.avatar.url}}" alt="ProfilePicture" class="w-10 h-10 rounded-full">
             {% else %}
             <h1 class="text-3xl">Logo</h1>
             {% endif %}
@@ -16,29 +16,29 @@
             
                 <form action="{% url 'home' %}" class="flex w-full lg:w-2/6  justify-start space-x-2 ">
                     <input type="text" name="q" placeholder="search products here" class="w-2/3
-                    font-normal  text-black rounded-lg text-lg px-3" 
+                    font-normal  text-black rounded-lg text-lg px-3"  
                     >
                     <button type="submit" class="md:px-5 md:py-2 px-2 py-1 shadow-md rounded-lg bg-white text-red-500">Search</button>
                 </form>
            
        <ion-icon id="menu" name="menu-outline" class="w-14 h-14 lg:hidden place-self-end self-center"></ion-icon>
-       <ion-icon id="menu-x" name="close-outline" class="w-14 h-14 hidden lg:hidden place-self-end self-center"></ion-icon>
+       <ion-icon id="menu-x" name="close-outline" class="w-14 h-14 hidden lg:hidden place-self-end self-center "></ion-icon>
 
     <div id="content" class="hidden lg:w-4/6 w-full absolute 
-                                lg:relative flex flex-col bg-red-600 top-[100%] 
-                                lg:top-0 lg:flex lg:flex-row justify-center 
-                                lg:justify-between items-center  px-10 right-0 
-                                transition-all duration-2000 ease-in-out pb-32 pt-5 lg:py-0 ">
+                                lg:relative flex flex-col md:bg-red-600 bg-red-100 top-[100%]  
+                                lg:-top-1 lg:flex lg:flex-row 
+                                lg:justify-between items-start  px-10 right-0 h-[50vh] md:h-[120%]
+                                transition-all duration-2000 ease-in-out pt-10   lg:py-0 ">
         <ul class="flex lg:flex-row justify-center lg:justify-around items-center 
-                    lg:items-end w-full font-bold text-2xl flex-col space-y-2">
-            <li><a href="{% url 'home' %}" >Home</a></li>
-            <li><a href="{% url 'cart' %}" >Cart</a></li>
-            <li><a href="{% url 'addproduct' %}" class="">Add Product</a></li>
+                    lg:items-end w-full font-bold text-2xl flex-col space-y-2 text-slate-600 md:text-white">
+            <li class="hover:bg-red-300 "><a href="{% url 'home' %}"  >Home</a></li>
+            <li class="hover:bg-red-300"><a href="{% url 'cart' %}" >Cart</a></li>
+            <li class="hover:bg-red-300"><a href="{% url 'addproduct' %}" class="">Add Product</a></li>
             {% if request.user.is_authenticated %}
-            <li><a href="{% url 'logout' %}">Logout</a> </li>
+            <li class="hover:bg-red-300"><a href="{% url 'logout' %}">Logout</a> </li>
             {% else %}
-            <li><a href="{% url 'login' %}">Login</a> </li>
-            <li><a href="{% url 'signup' %}">Signup</a></li>
+            <li class="hover:bg-red-300"><a href="{% url 'login' %}">Login</a> </li>
+            <li class="hover:bg-red-300"><a href="{% url 'signup' %}">Signup</a></li>
             {% endif %}
         </ul>
     </div>

@@ -7,15 +7,15 @@ class User(AbstractUser):
     email = models.EmailField(unique = True, null=True)
     avatar = models.ImageField(upload_to="images", default="images/profile.jpeg", null=True)
     address = models.CharField(max_length=200, null=True)
+    code = models.IntegerField(unique=False, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
-
-    # def __str__(self):
-    #     return str(self.email)
+    
     
 class Category(models.Model):
     name = models.CharField(max_length=200)
+    
 
     def __str__(self):
         return self.name
@@ -47,6 +47,7 @@ class Cart(models.Model):
 
     def __str__(self):
         return self.user.username
+
 
 
 

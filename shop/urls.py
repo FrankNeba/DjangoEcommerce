@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -18,7 +18,13 @@ urlpatterns = [
     path('profile/<str:pk>/', views.profile, name="profile"),
     path('removeitem/<str:pk>', views.removecart, name='removecart'),
     path("sendmail", views.mail, name='sendmail'),
-    path('order/<str:pk>', views.order, name='order')
+    path('order/<str:pk>', views.order, name='order'),
+    path('verification/', include('verify_email.urls')),
+    path('verify/<str:pk>/', views.verifyemail, name = 'verify'),
+    path('forgotpassword', views.forgotPassword, name='forgotpassword'),
+    path('resetpassword/<str:pk>', views.resetPassword, name='resetpassword'),
+    path('passwordcode/<str:pk>', views.passwordcode, name='passwordcode'),
+    path('resendpassword/<str:pk>', views.resendpassword, name='resendpassword')
 
     
 ]

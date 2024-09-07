@@ -2,87 +2,85 @@
 
 
 {% block content %}
-<main class="mt-20 flex items-center justify-center">
+<main class="mt-20 flex items-center justify-center flex-col">
     <form action="" 
     method = 'post' 
-    class="flex rounded-md flex-col space-y-5 bg-red-600 items-center justify-center p-5 w-full md:w-1/2 text-white"
-    enctype="multipart/form-data">
+    enctype="multipart/form-data"
+    class="flex rounded-md flex-col space-y-5 bg-red-100 items-center justify-center p-5 w-full  md:w-1/2 text-slate-600">
         {% csrf_token %}
         <div class="w-5/6 flex flex-col">
             <label 
                 for="productname"
                 class="text-3xl font-medium">Product name</label>
-            <input type="text" class="bg-red-100 rounded-sm h-10 text-red-500" name="name" value = "{{product.name}}" required>
+            <input type="text" class=" rounded-sm h-10 text-red-500 px-3" name="name" value = "{{product.name}}" required>
         </div>
 
         <div class="w-5/6 flex flex-col">
-            <label 
-                for="image"
+        
+
+                <label 
+                for="email"
                 class="text-3xl font-medium">Product Image</label>
             <input type="file" 
+            class=" rounded-sm h-10 text-red-500 px-3" 
+            accept="image/*"
+            name="image" 
+            id="image"
+            value="{{product.image}}"
+            required>
+            <label 
+                for="password"
+                class="text-3xl font-medium">Password</label>
+            <input type="password" 
                 accept="image/*" 
-                class="bg-red-200 rounded-sm h-10" 
-                name="image"
+                class=" rounded-sm h-10 text-red-500 px-3" 
+                name="password"
                 id="image"
-                value="{{product.image}}"
                 required>
-        </div>
-
-        <div class="w-5/6 flex flex-col">
             <label 
                 for="description"
                 class="text-3xl font-medium">Product description</label>
                 <textarea name="description" 
                 id="description" 
                 name="description"
-                class="bg-red-200 h-20 text-red-500 "
+                class=" h-20 text-red-500 "
                 required>{{product.description}}</textarea>
-        </div>
 
-        <div class="w-5/6 flex flex-col">
             <label 
                 for="price"
                 class="text-3xl font-medium">Price</label>
             <input type="number" 
-                class="bg-red-100 rounded-sm h-10 text-red-500" 
+                class=" rounded-sm h-10 text-red-500" 
                 name="price"
                 value="{{product.price}}"
                 required>
-        </div>
 
-        <div class="w-5/6 flex flex-col">
+     
             <label 
                 for="category"
                 class="text-3xl font-medium">Category</label>
                 <select name="category" 
                     id="category"
-                    class="bg-red-100 text-red-500"
                     required>
                     {% for category in categories %}
                     <option value="{{category.id}}" class="bg-red-100 text-black">{{category.name}}</option>
                 {% endfor %}
                     <option value="other" class="bg-red-100 text-black">Other</option>
                 </select>
-                    
-        </div>
 
-        <div class="w-5/6 flex flex-col">
-            <p>Fill the field below if category not found in category list</p>
+
+            <p class="my-5 text-center">Fill the field below if category not found in category list</p>
             <label 
                 for="price"
                 class="text-3xl font-medium">Item catergory</label>
             <input type="text" 
-                class="bg-red-100 rounded-sm h-10 text-red-500" 
+                class=" rounded-sm h-10 text-red-500" 
                 name="other"
                 value="{{product.price}}"
                 >
-        </div>
-
-
-
-        <button type="submit" class="w-16 h-10 bg-red-100 text-red-600 text-2xl font-medium rounded-lg shadow-2xl">Add</button> 
+            <button type="submit" class="w-full h-10 bg-red-400 text-white text-2xl font-medium rounded-lg shadow-2xl mt-10">Add</button> 
         
-    
+        </div>
     
     </form>
 </main>

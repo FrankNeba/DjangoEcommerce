@@ -7,24 +7,36 @@ from .forms import  UserForm, UserUpdate
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.core.mail import send_mail
+import random
+from django.contrib.auth.hashers import make_password
+from verify_email.email_handler import send_verification_email
 
 # Create your views here.
+
+def mail(message, subject, recipient):
+    send_mail(
+        subject=subject,
+        message= message,
+        recipient_list=[recipient],
+        from_email= None,
+        fail_silently=False
+    )
+
+
 #home view
 def home(request):
-    q = request.GET.get('q','')
-    p = request.GET.get('p','')
-    products = list(Product.objects.filter(Q(name__contains = q) ))
-    categories = list(Category.objects.filter(Q(name__contains = p)))
-    # if products.count() > 0 and categories.count() == 0:
-        # categories = []
-        # [categories.append(product.category) for product in products if product.category not in categories]
-    for category in categories:
-        countn = 0
-        for product in products:
-            if product.category == category:
-                countn += 1
-        if countn == 0:
-            categories.remove(category)
+    q = request.GET.get('q')
+    p = request.GET.get('p')
+    products = categories = []
+    
+    if q is None and p is not None and p is not '':
+        categories = Category.objects.filter(name__contains=p)
+        products = Product.objects.filter(category__name__contains = p)
+    else:
+        if q is None:
+            q=''
+        products = Product.objects.filter(name__contains = q)
+        [categories.append(product.category) for product in products if product.category not in categories]
 
     categoryoptions = Category.objects.all()
     context = {'products': products, 'categories':categories, 'categoryoptions': categoryoptions}
@@ -38,36 +50,62 @@ def Signup(request):
             user = User.objects.get(username = request.POST.get('username'))
         except:
             user = None
-        if user is not None:
+        if user is not None and user.is_active:
             messages.error(request, 'Username exists')
         else:
             try:
                 user = User.objects.get(email = request.POST.get('email'))
             except:
                 user = None
-            if user is not None:
+            if user is not None and user.is_active:    
                 messages.error(request, 'Email exists') 
             elif request.POST.get('password1') != request.POST.get('password2'):
                 messages.error(request,"Passwords don't match")
             else:
+                if user is not None and user.is_active == False:
+                    user.delete()
                 form = UserForm(request.POST)
+                
                 if form.is_valid():
                     user = form.save(commit = False)
+                    user.is_active = False
+                    code = random.randint(1000, 9999)
+                    user.code=code
                     user.save()
-                    login(request, user)
-                    return redirect('home')
+                    message = f'Hello {user.username}, \nYour Account activation code is {code}'
+                    try:
+                        send_mail(
+                        subject="Verify Ecommerce account",
+                        message= message,
+                        recipient_list=[user.email],
+                        from_email= None,
+                        fail_silently=False
+                    )
+                    except:
+                        messages.error(request, 'Check your internet connection \nCheck if email exist')
+
+                    return redirect('verify', pk=user.id)
                 messages.error(request, "Password can easily be guessed. Use a mixture of letters and symbols for a strong password")
-            # email = request.POST.get('email')
-            # username = request.POST.get('username')
-            # password1 = request.POST.get('password1')
-            # password2 = request.POST.get('password2')
-            # if len(password1) > 4 and password1 == password2:
-            #     user = User.objects.create_user(username = email, password= password2)
-            #     login(request, user)
-            #     return redirect('home')
-            # else:
-            #     messages.error(request, 'passwords dont match')
     return render(request, 'shop/signup.html', {'form':form})
+
+def verifyemail(request, pk):
+    user = User.objects.get(id = pk)
+    email = ''
+    for i in range(len(user.email)):
+        if i < 4:
+            email += user.email[i]
+        else :
+            email += '*'
+    if request.method == 'POST':
+        code = int(request.POST.get('code'))
+        if code == user.code:
+            user.is_active = True
+            user.save()
+            login(request, user)
+            return redirect ('home')
+        messages.error(request, 'Code is invalid')
+    return render(request, 'shop/verify.html', {'user':user, 'email':email})
+
 
 
 #update user
@@ -83,6 +121,7 @@ def Update(request):
     return render(request, 'shop/updateprofile.html', {'form':form})
 
 
+
 #user profile view
 @login_required(login_url='login')
 def profile(request, pk):
@@ -90,11 +129,6 @@ def profile(request, pk):
     products = Product.objects.filter(seller = user)
     context = {"products": products}
     return render(request, 'shop/profile.html', context)
-
-
-
-
-
 
 
 #login view
@@ -108,6 +142,86 @@ def Loginview(request):
             return redirect('home')
         messages.error(request, "email or password not correct")
     return render(request, 'shop/login.html')
+
+def forgotPassword(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email = email)
+            code = random.randint(11111, 99999)
+            user.code = code
+            user.save()
+            message = f'Hello {user.username}, \nYour Password reset code is {code}'
+            subject = 'ResetPassword'
+            recipient = user.email
+            try:
+                mail(message,subject, recipient)
+            except:
+                messages.error(request, 'Message not sent. Check your internet conection')
+            return redirect('passwordcode', pk=user.id)
+        except:
+            messages.error(request, f'Account with email {email} doesn\'t exist')
+    return render(request, 'shop/forgotpassword.html')
+
+def passwordcode(request, pk):
+    user = User.objects.get(id = pk)
+    email = ''
+    for i in range(len(user.email)):
+        if i < 4:
+            email += user.email[i]
+        else :
+            email += '*'
+    if request.method == 'POST':
+        code = int(request.POST.get('code'))
+        if code == user.code:
+            return  redirect('resetpassword', pk=user.id)
+        messages.error(request, 'Invalid code')
+    return render(request, 'shop/passwordcode.html', {'user':user})
+
+def resendpassword(request, pk):
+    user = User.objects.get(id = pk)
+    code = random.randint(11111, 99999)
+    user.code = code
+    user.save()
+    message = f'Hello {user.username}, \nYour Password reset code is {code}'
+    subject = 'ResetPassword'
+    recipient = user.email
+    try:
+        mail(message,subject, recipient)
+    except:
+        messages.error(request, 'Message not sent. Check your internet conection')
+    return redirect('passwordcode', pk=user.id)
+
+
+
+def resetPassword(request, pk):
+    if request.method == 'POST':
+        user = User.objects.get(id = pk)
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        if len(password1) < 8:
+            messages.error(request, 'Password must be atleast 8 characters')
+        elif password1 != password2:
+            messages.error(request, 'Passwords don\'t  match')
+        else:
+            
+            try: 
+                password = int(password)
+                messages.error(request, 'Password can easily be guessed')
+            except:
+                user.password = make_password(password1)
+                user.save()
+                # login(request, user)
+                return redirect('login')
+            
+    return render(request, 'shop/resetpassword.html')
+                
+        
+
+        
+
+
+
 
 
 #logout view
@@ -220,9 +334,10 @@ def viewCart(request):
 
 @login_required(login_url='login')
 def removecart(request, pk):
-    item = Cart.objects.get(id=pk)
-    item.delete()
-    return redirect('cart')
+    if request.method == 'POST':
+        item = Cart.objects.get(id=pk)
+        item.delete()
+        return redirect('cart')
 
 @login_required(login_url='login')
 def order(request, pk):
@@ -250,16 +365,7 @@ def order(request, pk):
     context = {'product': product}
     return render(request, 'shop/order.html', context)
 
-@login_required(login_url='login')
-def mail(request):
-    send_mail(
-        subject="Hello",
-        message= "Django Email testing",
-        recipient_list=["frankneba92@gmail.com"],
-        from_email= None,
-        fail_silently=False
-    )
-    return redirect("cart")
+
     
     
 
