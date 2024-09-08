@@ -15,11 +15,11 @@
             <input type="text" class=" rounded-sm h-10 text-red-500 px-3" name="name" value = "{{product.name}}" required>
         </div>
 
-        <div class="w-5/6 flex flex-col">
+        <div class="w-5/6 flex flex-col space-y-3">
         
 
                 <label 
-                for="email"
+                for="image"
                 class="text-3xl font-medium">Product Image</label>
             <input type="file" 
             class=" rounded-sm h-10 text-red-500 px-3" 
@@ -28,15 +28,7 @@
             id="image"
             value="{{product.image}}"
             required>
-            <label 
-                for="password"
-                class="text-3xl font-medium">Password</label>
-            <input type="password" 
-                accept="image/*" 
-                class=" rounded-sm h-10 text-red-500 px-3" 
-                name="password"
-                id="image"
-                required>
+           
             <label 
                 for="description"
                 class="text-3xl font-medium">Product description</label>
@@ -61,6 +53,7 @@
                 class="text-3xl font-medium">Category</label>
                 <select name="category" 
                     id="category"
+                    class="h-10"
                     required>
                     {% for category in categories %}
                     <option value="{{category.id}}" class="bg-red-100 text-black">{{category.name}}</option>
@@ -69,14 +62,14 @@
                 </select>
 
 
-            <p class="my-5 text-center">Fill the field below if category not found in category list</p>
+            <p class="my-5 text-center md:text-start">Fill the field below if category not found in category list</p>
             <label 
                 for="price"
                 class="text-3xl font-medium">Item catergory</label>
             <input type="text" 
                 class=" rounded-sm h-10 text-red-500" 
                 name="other"
-                value="{{product.price}}"
+                value="{{product.category.name}}"
                 >
             <button type="submit" class="w-full h-10 bg-red-400 text-white text-2xl font-medium rounded-lg shadow-2xl mt-10">Add</button> 
         

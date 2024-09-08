@@ -13,3 +13,15 @@
         menu.classList.toggle('hidden')
         menuX.classList.toggle('hidden')
     })
+
+    // const amount = document.getElementById('amount')
+    // const total = document.getElementById('total')
+    // const itemprice = document.getElementById('itemprice')
+
+    // amount.addEventListener('change', ()=> {
+    //     let price = Number(amount.value) * Number(itemprice)
+    //     total.textContent = amount.value
+    //     console.log('iteminputed')
+    // })
+
+

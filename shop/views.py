@@ -65,6 +65,10 @@ def Signup(request):
                 if user is not None and user.is_active == False:
                     user.delete()
                 form = UserForm(request.POST)
+                form.email = request.POST.get('email')
+                form.username = request.POST.get('username')
+                form.password1 = request.POST.get('password1')
+                form.password2 = request.POST.get('password2')
                 
                 if form.is_valid():
                     user = form.save(commit = False)
@@ -73,16 +77,16 @@ def Signup(request):
                     user.code=code
                     user.save()
                     message = f'Hello {user.username}, \nYour Account activation code is {code}'
-                    try:
-                        send_mail(
-                        subject="Verify Ecommerce account",
-                        message= message,
-                        recipient_list=[user.email],
-                        from_email= None,
-                        fail_silently=False
-                    )
-                    except:
-                        messages.error(request, 'Check your internet connection \nCheck if email exist')
+                    # try:
+                    #     send_mail(
+                    #     subject="Verify Ecommerce account",
+                    #     message= message,
+                    #     recipient_list=[user.email],
+                    #     from_email= None,
+                    #     fail_silently=False
+                    # )
+                    # except:
+                    #     messages.error(request, 'Check your internet connection \nCheck if email exist')
 
                     return redirect('verify', pk=user.id)
                 messages.error(request, "Password can easily be guessed. Use a mixture of letters and symbols for a strong password")
@@ -215,14 +219,6 @@ def resetPassword(request, pk):
                 return redirect('login')
             
     return render(request, 'shop/resetpassword.html')
-                
-        
-
-        
-
-
-
-
 
 #logout view
 def LogoutView(request):
@@ -234,6 +230,7 @@ def LogoutView(request):
 def addProduct(request):
     categories = Category.objects.all()
     if request.method == 'POST':
+        image = request.FILES.get('image')
         name = request.POST.get("name")
         seller = request.user
         price = int(request.POST.get('price'))
@@ -246,9 +243,9 @@ def addProduct(request):
             category = Category.objects.get(name = newCategory)
         else:
             category = Category.objects.get(id=int(category))
-        image = request.FILES.get('image')
-        form = Product(name = name, seller = seller, price = price, description = description, category = category, image = image)
-        form.save()
+        
+        product = Product(name = name, seller = seller, price = price, description = description, category = category, image = image)
+        product.save()
         return redirect('home')
     
     context = {'categories': categories}
@@ -273,6 +270,7 @@ def editProduct(request,pk):
         product.seller = seller
         product.price = price
         product.description = description
+        product.image = image
         product.save()
         return redirect('home')
     
